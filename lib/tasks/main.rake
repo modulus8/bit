@@ -62,7 +62,7 @@ namespace :main do
     p "+++++++++++++++++++++++++"
     p "処理時間： #{Time.now - s_time}"
   end
-  
+
 
 
 end

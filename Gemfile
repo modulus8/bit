@@ -132,3 +132,5 @@ gem 'passenger'
 
 gem 'execjs'
 gem 'therubyracer'
+
+gem "rest-client"
