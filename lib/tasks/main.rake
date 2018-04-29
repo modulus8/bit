@@ -67,7 +67,13 @@ namespace :main do
 
     p "+++++++++++++++++++++++++"
     p "処理時間： #{Time.now - s_time}"
-    coin = Coin.new(mid_price: mid_price, sell_count: sell_count, sell_sum: sell_sum, buy_count: buy_count, buy_sum: buy_sum)
+    coin = Coin.new(
+        mid_price: mid_price,
+        sell_count: sell_count,
+        sell_sum: sell_sum,
+        buy_count: buy_count,
+        buy_sum: buy_sum
+    )
     unless coin.save
       p "記録に失敗しました。"
     end
@@ -78,9 +84,6 @@ namespace :main do
 
 
 
-
-
-  
 
   desc "BIT-FXボード確認用"
   task :fx_bit_board => :environment do
@@ -108,9 +111,13 @@ namespace :main do
       p "下降: #{recent_data.mid_price - mid_price}"
     end
     p "+++++++++++++++++++++++++"
-    p "mid_price: #{mid_price}　前回：#{recent_data.mid_price}"
+    p "mid_price: #{mid_price}"
+    hour_price = Coin.where("created_at >= ?", Time.now - 1.hours).map(&:mid_price)
+    min_price = hour_price.min
+    max_price = hour_price.max
+    p "１時間最小値=#{min_price} 比較：#{mid_price - min_price}"
+    p "１時間最大値=#{max_price} 比較：#{mid_price - max_price}"
     p "+++++++++++++++++++++++++"
-
 
     sell = JSON.parse(response.body)["bids"]
     sell_count = sell.length
@@ -122,8 +129,8 @@ namespace :main do
       sell_sum += sum
     end
     p "+++++++++++++++++++++++++"
-    p "売り数: #{sell_count}"
-    p "売り総額: #{sell_sum * percent}"
+    p "売り数: #{sell_count} 比較：#{recent_data.sell_count - sell_count}"
+    p "売り総額: #{sell_sum * percent} 比較：#{(recent_data.sell_sum - sell_sum) * percent}"
 
 
     buy = JSON.parse(response.body)["asks"]
@@ -136,8 +143,8 @@ namespace :main do
       buy_sum += sum
     end
     p "+++++++++++++++++++++++++"
-    p "買い数: #{buy_count}"
-    p "買い総額: #{buy_sum  * percent }"
+    p "買い数: #{buy_count} 比較：#{recent_data.buy_count - buy_count}"
+    p "買い総額: #{buy_sum  * percent } 比較：#{(recent_data.buy_sum - buy_sum) * percent}"
 
     p "+++++++++++++++++++++++++"
     p "カウント比較: #{sell_count >= buy_count ? "売り #{sell_count - buy_count}" : "買い #{buy_count - sell_count}"}"
