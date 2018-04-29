@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  mid_price: 1.5
+  sell_count: 1
+  sell_sum: 1.5
+  buy_count: 1
+  buy_sum: MyString
+  float: MyString
+
+two:
+  mid_price: 1.5
+  sell_count: 1
+  sell_sum: 1.5
+  buy_count: 1
+  buy_sum: MyString
+  float: MyString
